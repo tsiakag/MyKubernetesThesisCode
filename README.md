@@ -1,0 +1,2 @@
+# My Kubernetes Thesis
+This repository contains the basic scripts that i have used to accomplish the results for my thesis in ECE NTUA. Each folder is used to implement a specific scheduler algorithm, testing or analyzing the results
