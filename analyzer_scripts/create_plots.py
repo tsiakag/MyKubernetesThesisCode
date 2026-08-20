@@ -1,8 +1,14 @@
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import numpy as np 
 from matplotlib import pyplot as plt 
 import pandas as pd
 
-apps = ['shipping', 'web', 'payment', 'cart', 'catalogue', 'ratings', 'user']
+apps = settings.APPS
 df = pd.read_csv('./all_response_and_balance.csv')
 
 # show response time plots

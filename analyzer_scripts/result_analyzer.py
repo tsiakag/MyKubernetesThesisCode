@@ -2,9 +2,14 @@
 # analyze the results from the csv's in order to
 # create a csv that can be used for the plots
 
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import pandas as pd
 import csv
-import sys
 
 def write_to_csv(line, file):
     # write to csv file
@@ -22,7 +27,7 @@ if __name__ == "__main__":
     # change it to desired
     results['scheduler'] = 'netmarks'
 
-    apps = ['shipping', 'web', 'payment', 'cart', 'catalogue', 'ratings', 'user']
+    apps = settings.APPS
 
     df = pd.read_csv(filename)
 
@@ -32,7 +37,7 @@ if __name__ == "__main__":
 
     # we exclude the control plane
     # FIXME: change it to take the nodes from the API
-    nodes_cols = ['microk8s-tsiakag-md-0-66rwq_cost','microk8s-tsiakag-md-0-9zd48_cost','microk8s-tsiakag-md-0-j2cfc_cost']
+    nodes_cols = settings.WORKER_NODE_COST_COLUMNS
     costs = pd.DataFrame(df, columns=nodes_cols)
 
     average_cost_diff = 0
@@ -60,7 +65,7 @@ def analyze_scatter_plot(scheduler_name):
     # change it to desired
     results['scheduler'] = scheduler_name
 
-    apps = ['shipping', 'web', 'payment', 'cart', 'catalogue', 'ratings', 'user']
+    apps = settings.APPS
 
 
     df = pd.read_csv(filename)
@@ -70,7 +75,7 @@ def analyze_scatter_plot(scheduler_name):
         results[app+"_ms"] = df[app+"_ms"].mean()
 
     # we exclude the control plane
-    nodes_cols = ['microk8s-tsiakag-md-0-66rwq_cost','microk8s-tsiakag-md-0-9zd48_cost','microk8s-tsiakag-md-0-j2cfc_cost']
+    nodes_cols = settings.WORKER_NODE_COST_COLUMNS
     costs = pd.DataFrame(df, columns=nodes_cols)
 
     average_cost_diff = 0

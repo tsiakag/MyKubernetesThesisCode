@@ -1,7 +1,12 @@
 #IMPORTANT NOTE:
 # this script defines the scheduler by providing the json
 # the bash scripts will have to specify this
+import os
 import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import time
 import json
 
@@ -18,7 +23,7 @@ def connect_to_api():
 
 v1 = connect_to_api()
 
-scheduler_name = "NETmarks"
+scheduler_name = settings.SCHEDULER_NAME
 
 def get_pod_appname(pod):
     apiInstance = connect_to_api()
@@ -43,7 +48,7 @@ def read_results(filename):
 
     return data
 
-def scheduler(name, node, namespace="robot-shop"):
+def scheduler(name, node, namespace=settings.NAMESPACE):
         
     target=client.V1ObjectReference()
     target.kind="Node"
@@ -72,7 +77,7 @@ def main():
     tic = time.perf_counter()
     w = watch.Watch()
     # can change later watcable stream
-    for event in w.stream(v1.list_namespaced_pod, "robot-shop"):
+    for event in w.stream(v1.list_namespaced_pod, settings.NAMESPACE):
         if event['object'].status.phase == "Pending" and event['object'].spec.scheduler_name == scheduler_name:
             # for testing purposes
             time.sleep(1)

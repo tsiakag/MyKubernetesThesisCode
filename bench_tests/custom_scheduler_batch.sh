@@ -1,10 +1,13 @@
 cd ../
+
+# cluster specific values come from config.json in the repository root
+CONTROL_PLANE_NODE=$(python3 -c 'import settings; print(settings.CONTROL_PLANE_NODE)')
 echo "Starting bash script for netmarks scheduler testing"
 echo "Time of start:"
 date
 
 # taint the control plane 
-kubectl taint nodes microk8s-tsiakag-control-plane-4gw82 key1=value1:NoSchedule
+kubectl taint nodes "$CONTROL_PLANE_NODE" key1=value1:NoSchedule
 
 for i in {1..24}
 do
@@ -45,7 +48,7 @@ do
 done
 
 # untaint the control plane
-kubectl taint nodes microk8s-tsiakag-control-plane-4gw82 key1=value1:NoSchedule-
+kubectl taint nodes "$CONTROL_PLANE_NODE" key1=value1:NoSchedule-
 
 echo "Netmarks Test Completed!"
 echo "Ended at:"

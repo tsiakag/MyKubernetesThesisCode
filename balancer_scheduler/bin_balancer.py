@@ -1,7 +1,12 @@
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import json
 import binpacking
 from kubernetes import client, config
-import sys
 from fetch_opencost_costs import write_results_to_file
 import copy
 
@@ -70,7 +75,7 @@ if __name__ == '__main__':
 
     # read node_costs and remove unecessary pods
     existing_weights = dict(read_results('./node_costs.json'))
-    existing_weights.pop('microk8s-tsiakag-control-plane-4gw82')
+    existing_weights.pop(settings.CONTROL_PLANE_NODE)
     existing_weights.pop('') # sometimes and empty record will appear
 
     existing_weights_list = list(existing_weights.values())

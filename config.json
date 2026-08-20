@@ -1,0 +1,19 @@
+{
+    "cluster": {
+        "control_plane_node": "microk8s-tsiakag-control-plane-4gw82",
+        "worker_nodes": [
+            "microk8s-tsiakag-md-0-66rwq",
+            "microk8s-tsiakag-md-0-9zd48",
+            "microk8s-tsiakag-md-0-j2cfc"
+        ],
+        "namespace": "robot-shop",
+        "scheduler_name": "NETmarks"
+    },
+    "endpoints": {
+        "prometheus_url": "http://localhost:9090",
+        "opencost_url": "http://localhost:9003"
+    },
+    "workload": {
+        "apps": ["shipping", "web", "payment", "cart", "catalogue", "ratings", "user"]
+    }
+}

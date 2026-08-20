@@ -1,3 +1,9 @@
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import numpy as np 
 from matplotlib import pyplot as plt 
 import pandas as pd
@@ -22,7 +28,7 @@ if __name__ == '__main__':
     colors=['k', 'm', 'r', 'g', 'b']
     labels=['original', 'netmarks1', 'netmarks6', 'bin balancer', 'combined']
 
-    apps = ['shipping', 'web', 'payment', 'cart', 'catalogue', 'ratings', 'user']
+    apps = settings.APPS
 
     for file in files:
         # use result_analyzer (slower but easier (i dont even care any more))

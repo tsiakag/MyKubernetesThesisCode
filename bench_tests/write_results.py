@@ -1,23 +1,28 @@
 import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import requests
 import csv
 from prometheus_api_client import PrometheusConnect
 from prometheus_api_client.utils import parse_datetime
-import sys
 
 if __name__ == '__main__':
     
     # get the response times for each app
-    apps = ['shipping', 'web', 'payment', 'cart', 'catalogue', 'ratings', 'user']
+    apps = settings.APPS
     
     ms_results = {}
     for app in apps:
 
-        query = "sum(rate(istio_request_duration_milliseconds_sum{reporter='destination', destination_service='"+app+".robot-shop.svc.cluster.local'}[2m])) / sum(rate(istio_request_duration_milliseconds_count{reporter='destination', destination_service='"+app+".robot-shop.svc.cluster.local'}[2m]))"
+        service = app + '.' + settings.NAMESPACE + '.svc.cluster.local'
+        query = "sum(rate(istio_request_duration_milliseconds_sum{reporter='destination', destination_service='"+service+"'}[2m])) / sum(rate(istio_request_duration_milliseconds_count{reporter='destination', destination_service='"+service+"'}[2m]))"
         time_start = parse_datetime('15m')
         time_end = parse_datetime('now')
 
-        prom = PrometheusConnect(url="http://localhost:9090", disable_ssl=True)
+        prom = PrometheusConnect(url=settings.PROMETHEUS_URL, disable_ssl=True)
         metrics = prom.custom_query_range(query, time_start, parse_datetime('now'), '30s')
 
         # calculate the average response time
@@ -49,7 +54,7 @@ if __name__ == '__main__':
         'accumulate' : 'true'
     }
 
-    res = requests.get('http://localhost:9003/allocation/compute', params=parameters).json()
+    res = requests.get(settings.OPENCOST_ALLOCATION_URL, params=parameters).json()
 
     node_costs = {}
 
@@ -69,7 +74,7 @@ if __name__ == '__main__':
         'accumulate' : 'true'
     }
 
-    res = requests.get('http://localhost:9003/allocation/compute', params=parameters2).json()
+    res = requests.get(settings.OPENCOST_ALLOCATION_URL, params=parameters2).json()
 
     for pod, pod_data in res['data'][0].items():
         if pod.split('-')[0] == 'load':

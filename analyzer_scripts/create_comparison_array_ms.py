@@ -2,6 +2,12 @@
 # Was used to simply calculate the 
 # differcences in % for the scheduler
 # and be used in the thesis 
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import numpy as np 
 from matplotlib import pyplot as plt 
 import pandas as pd
@@ -17,7 +23,7 @@ def calculate_percentage(x1, x2):
 def lists_to_dictionary(keys, values):
     return {keys[i]: values[i] for i in range(len(keys))}
 
-apps = ['shipping', 'web', 'payment', 'cart', 'catalogue', 'ratings', 'user']
+apps = settings.APPS
 df = pd.read_csv('./results_avg.csv')
 
 # for array 

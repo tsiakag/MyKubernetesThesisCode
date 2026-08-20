@@ -1,3 +1,9 @@
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 import json
 import requests
 
@@ -21,7 +27,7 @@ if __name__ == '__main__':
         'accumulate' : 'true'
     }
     
-    res = requests.get('http://localhost:9003/allocation/compute', params=parameters).json()
+    res = requests.get(settings.OPENCOST_ALLOCATION_URL, params=parameters).json()
 
     # check if the request was valid
     if res['code'] != 200:
@@ -32,7 +38,7 @@ if __name__ == '__main__':
     costs = {}
     for pod, pod_data in res['data'][0].items():
         app = pod.split('-')[0]
-        if(pod_data['properties']['namespace'] == 'robot-shop'):
+        if(pod_data['properties']['namespace'] == settings.NAMESPACE):
             costs[app] = {}
 
             costs[app]['cpu'] = pod_data['cpuCost']
@@ -51,7 +57,7 @@ if __name__ == '__main__':
         'aggregate' : 'node',
         'accumulate' : 'true'
     }
-    node_res = requests.get('http://localhost:9003/allocation/compute', params=parameters).json()
+    node_res = requests.get(settings.OPENCOST_ALLOCATION_URL, params=parameters).json()
     
     if res['code'] != 200:
        print('Invalid Request')
@@ -65,7 +71,7 @@ if __name__ == '__main__':
 
     # then remove the robot-shop containers costs
     for pod, pod_data in res['data'][0].items():
-        if(pod_data['properties']['namespace'] == 'robot-shop'):
+        if(pod_data['properties']['namespace'] == settings.NAMESPACE):
             app = pod.split('-')[0]
             node = pod_data['properties']['node']
 

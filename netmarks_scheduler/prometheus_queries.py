@@ -1,9 +1,15 @@
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 from prometheus_api_client import PrometheusConnect
 from datetime import timedelta, datetime
 from prometheus_api_client.utils import parse_datetime
 
 # establish prometheus connection
-prom = PrometheusConnect(url="http://localhost:9090", disable_ssl=True)
+prom = PrometheusConnect(url=settings.PROMETHEUS_URL, disable_ssl=True)
 
 def CalculateF(t_end, F_prev, t0, t1, labels, sample_rate):
 

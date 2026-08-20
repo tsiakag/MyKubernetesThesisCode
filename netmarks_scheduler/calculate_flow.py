@@ -1,4 +1,10 @@
 # from netmarks import *
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 from prometheus_queries import FScore
 from kubernetes import client, config, utils
 from prometheus_api_client.utils import parse_datetime
@@ -10,7 +16,7 @@ def connect_to_api():
 
     return client.CoreV1Api()
 
-def list_pods(namespace='george'):
+def list_pods(namespace=settings.NAMESPACE):
         apiInstance = connect_to_api()
         pods = apiInstance.list_namespaced_pod(namespace)
 
@@ -38,7 +44,7 @@ def write_results_to_file(filename, results):
 # returns dict with flows between all apps
 def calculate_all_flows():
     
-    pods = list_pods('robot-shop')
+    pods = list_pods(settings.NAMESPACE)
     flows = {}
 
     for pod_x in pods:

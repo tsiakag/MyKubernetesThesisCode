@@ -1,3 +1,9 @@
+import os
+import sys
+# change directory of script so setting can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 from kubernetes import client, config, utils
 import json
 
@@ -132,7 +138,7 @@ if __name__ == '__main__':
     # init values needed
     flows = get_flows('flows.json')
     nodes = nodes_available()
-    nodes.remove('named_smhow') # remove the control plane node
+    nodes.remove(settings.CONTROL_PLANE_NODE) # remove the control plane node
     apps = list(get_apps(flows))
 
     # unlike netmarks, we use the balancer dist
