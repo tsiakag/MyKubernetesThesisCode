@@ -3,34 +3,10 @@ import sys
 # change directory of script so setting can be imported
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
+from helper import read_results, write_results_to_file
 
-import json
-import binpacking
-from kubernetes import client, config
-from fetch_opencost_costs import write_results_to_file
 import copy
 
-def connect_to_api():
-    config.load_kube_config()
-
-    return client.CoreV1Api()
-
-def nodes_available():
-    v1 = connect_to_api()
-    ready_nodes = []
-    for n in v1.list_node().items:
-            for status in n.status.conditions:
-                if status.status == "True" and status.type == "Ready":
-                    ready_nodes.append(n.metadata.name)
-    return ready_nodes
-
-def read_results(filename):
-    # Opening JSON file
-    f = open(filename)  
-    data = json.load(f)
-    f.close()
-
-    return data
 
 #NOTE:  main recursive algortihm
 def my_distributer(dist, dist_apps ,index, weights, apps):

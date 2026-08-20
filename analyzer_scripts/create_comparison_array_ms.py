@@ -8,8 +8,6 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
 
-import numpy as np 
-from matplotlib import pyplot as plt 
 import pandas as pd
 
 def calculate_percentage(x1, x2):

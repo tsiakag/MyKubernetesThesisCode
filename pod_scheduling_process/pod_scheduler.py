@@ -6,47 +6,20 @@ import sys
 # change directory of script so setting can be imported
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
+from helper import connect_to_api, get_pod_appname, read_results
 
 import time
 import json
 
-from kubernetes import client, config, watch, utils
+from kubernetes import client, watch
 import warnings
 warnings.filterwarnings("ignore") 
 
 #region helper functions
-def connect_to_api():
-    # server implementation
-    config.load_kube_config()
-
-    return client.CoreV1Api()
-
 v1 = connect_to_api()
 
 scheduler_name = settings.SCHEDULER_NAME
 
-def get_pod_appname(pod):
-    apiInstance = connect_to_api()
-    pods = apiInstance.list_pod_for_all_namespaces()
-    for item in pods.items:
-        if item.metadata.name == pod:
-            return item.metadata.labels['app']
-
-def nodes_available():
-    ready_nodes = []
-    for n in v1.list_node().items:
-            for status in n.status.conditions:
-                if status.status == "True" and status.type == "Ready":
-                    ready_nodes.append(n.metadata.name)
-    return ready_nodes
-
-def read_results(filename):
-    # Opening JSON file
-    f = open(filename)  
-    data = json.load(f)
-    f.close()
-
-    return data
 
 def scheduler(name, node, namespace=settings.NAMESPACE):
         

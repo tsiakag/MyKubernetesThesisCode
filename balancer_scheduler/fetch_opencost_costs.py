@@ -3,18 +3,9 @@ import sys
 # change directory of script so setting can be imported
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
+from helper import write_results_to_file
 
-import json
 import requests
-
-
-def write_results_to_file(filename, results):
-    # Serializing json
-    json_object = json.dumps(results)
-    
-    # Writing to sample.json
-    with open(filename, "w") as outfile:
-        outfile.write(json_object)
 
 
 if __name__ == '__main__':

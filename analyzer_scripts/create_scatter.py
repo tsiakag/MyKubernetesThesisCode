@@ -3,19 +3,12 @@ import sys
 # change directory of script so setting can be imported
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
+from helper import write_row_to_csv
 
 import numpy as np 
 from matplotlib import pyplot as plt 
-import pandas as pd
 import csv
 
-def write_to_csv(line, file):
-    # write to csv file
-    with open(file, 'a') as csvfile:
-        csvwriter = csv.writer(csvfile)
-
-        # write fields if they do not exist
-        csvwriter.writerow(line)
 if __name__ == '__main__':
     files = [
         '../results/original_results.csv',
@@ -55,7 +48,7 @@ if __name__ == '__main__':
                 costs = np.array(costs, dtype=float)
 
                 line = [labels[files.index(file)], np.mean(np.array(response_times, dtype=float)), max(costs) - min(costs)]
-                write_to_csv(line, 'analyze_for_scatter.csv')
+                write_row_to_csv(line, 'analyze_for_scatter.csv')
 
                 y.append(np.mean(np.array(response_times, dtype=float)))
                 x.append(max(costs) - min(costs))

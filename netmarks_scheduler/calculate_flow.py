@@ -4,17 +4,10 @@ import sys
 # change directory of script so setting can be imported
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
+from helper import connect_to_api, get_pod_appname, write_results_to_file
 
 from prometheus_queries import FScore
-from kubernetes import client, config, utils
 from prometheus_api_client.utils import parse_datetime
-import json
-
-def connect_to_api():
-    # server implementation
-    config.load_kube_config()
-
-    return client.CoreV1Api()
 
 def list_pods(namespace=settings.NAMESPACE):
         apiInstance = connect_to_api()
@@ -26,20 +19,6 @@ def list_pods(namespace=settings.NAMESPACE):
 
         return podList
 
-def get_pod_appname(pod):
-    apiInstance = connect_to_api()
-    pods = apiInstance.list_pod_for_all_namespaces()
-    for item in pods.items:
-        if item.metadata.name == pod:
-            return item.metadata.labels['app']
-
-def write_results_to_file(filename, results):
-    # Serializing json
-    json_object = json.dumps(results)
-    
-    # Writing to sample.json
-    with open(filename, "w") as outfile:
-        outfile.write(json_object)
 
 # returns dict with flows between all apps
 def calculate_all_flows():
