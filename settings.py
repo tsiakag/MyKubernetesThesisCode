@@ -1,18 +1,5 @@
-# Single source of truth for the cluster specific values used by every script:
-# node names, the namespace, the scheduler name, the app list and the
-# Prometheus / OpenCost endpoints.
-#
-# The values themselves live in config.json next to this file, so moving the
-# scripts to a different cluster only means editing that one JSON file.
-#
-# Scripts are run from inside their own folder (see bench_tests/*.sh), so they
-# put the repository root on sys.path before importing this module:
-#
-#     import os
-#     import sys
-#     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-#     import settings
-#
+
+# Parses the settings in config.json next to this file
 # NOTE: this module is called `settings` and not `config` on purpose. Most of
 # the scripts already do `from kubernetes import client, config`, which would
 # shadow a module named `config`.
